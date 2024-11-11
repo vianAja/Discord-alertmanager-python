@@ -1,0 +1,9 @@
+[Unit]
+Description=Python for alert Discord
+
+[Service]
+User=root
+ExecStart=/usr/bin/python3 /usr/local/bin/alert_discord.py
+
+[Install]
+WantedBy=default.target
