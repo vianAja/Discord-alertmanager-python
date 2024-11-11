@@ -1,5 +1,14 @@
 # Initialize
 
+## Installing Dependencies
+```
+sudo pip install -r requirement.txt
+```
+_if error, can use this command_
+```
+sudo pip3 install -r requirement.txt
+```
+
 ## Change the following data
 
 ```
