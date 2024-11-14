@@ -17,14 +17,14 @@ def scraping(data):
     traffic_channel_ID      = "CHANNEL_ID_TRAFFIC"
     nginx_channel_ID        = "CHANNEL_ID_NGINX"
     apache_channel_ID       = "CHANNEL_ID_APACHE"
-
+    db = []
     for list_alert in data['alerts']:
         alertName   = list_alert['labels']['alertname']
         instance    = list_alert['labels']['instance']
 
         start_time = list_alert['startsAt']
 #datetime.datetime.fromisoformat(list_alert['startsAt'])
-        waktu = f"Sejak {start_time}"
+        waktu = f"{start_time}"
 
         if instance.split(':')[0].split('.')[-1]   == "10":
             node = 'Node Monitoring'
@@ -107,7 +107,9 @@ def scraping(data):
 
 **Timestamp:** `{waktu}`
         """
-        return [channel, pesan]
+        db.append([channel,pesan])
+    return db
+#    return [channel, pesan]
 
 @client.event
 async def on_ready():
@@ -120,8 +122,10 @@ async def send_discord(channel, pesan):
 @app.route('/test', methods=['POST'])
 def handle_request():
     data = request.get_json()
-    channel_id,pesan = scraping(data)
-    client.loop.create_task(send_discord(channel_id, pesan))
+    hasil = scraping(data)
+#    channel_id,pesan = scraping(data)
+    for channel_id, pesan in hasil:
+        client.loop.create_task(send_discord(channel_id, pesan))
 
     response_data = {
         "message": "Data berhasil diterima",
